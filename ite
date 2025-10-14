@@ -1,0 +1,11 @@
+[33mcommit eed194d80ea849b892b5fff36bfd997c0f1ce67a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: avrylle-ayuda <ayuda.avrylle11@gmail.com>
+Date:   Wed Oct 15 02:58:12 2025 +0800
+
+    Initial commit with reorganized static, templates, and model files
+
+[33mcommit 20a74d3d3d010a0b23d5b0435f7614c5e4574d77[m
+Author: avrylle-ayuda <ayuda.avrylle11@gmail.com>
+Date:   Wed Oct 15 02:47:56 2025 +0800
+
+    Initial commit with backend, frontend, and model files
