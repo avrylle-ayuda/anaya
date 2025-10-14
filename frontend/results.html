@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disease Prediction Result - ANAYA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f9f4;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      position: relative;
+      background: linear-gradient(135deg, #64b651, #a5cd41);
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      color: white;
+      min-height: 300px;
+      width: 100%;
+    }
+
+    .menu-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .back-button {
+      font-size: 28px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-button img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
+    }
+
+    .header-center {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .header-center img {
+      height: 130px;
+    }
+
+    .user-icon {
+      height: 36px;
+      width: 36px;
+      object-fit: contain;
+    }
+
+    #title {
+      position: absolute;
+      bottom: -25px;
+      left: 20px;
+      font-size: 70px;
+      font-weight: 700;
+    }
+
+    .form-section {
+      padding: 25px 20px 40px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .prediction-label {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .prediction-result {
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .disease-border {
+      border-radius: 10px;
+      padding: 10px;
+      background: linear-gradient(135deg, #ed1a6d, #f05f99);
+      margin-bottom: 20px;
+      display: inline-block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .disease-image {
+      width: 100%;
+      height: 500px;
+      border-radius: 6px;
+      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #333;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .disease-card {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #64b651, #a5cd41);
+      border-radius: 10px;
+      text-align: left;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .disease-card h3 {
+      font-size: 22px;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    .disease-card p {
+      font-size: 15px;
+      margin: 6px 0;
+    }
+
+    .weather-data {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 2px solid #64b651;
+      border-radius: 10px;
+      background: #f9f9f9;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .weather-data p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="menu-container">
+      <button class="back-button" onclick="window.location.href='prediction.html'">
+        <img src="https://cdn-icons-png.flaticon.com/512/271/271220.png" alt="Back">
+      </button>
+    </div>
+    <div class="header-center">
+      <img src="ANAYA_logo.png.png" alt="ANAYA Logo" />
+    </div>
+    <div style="position: absolute; top: 20px; right: 20px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon" alt="User" />
+    </div>
+    <h2 id="title">Results</h2>
+  </div>
+
+  <div class="form-section">
+    <div class="prediction-label">Predicted Rice Crop Disease:</div>
+    <div class="prediction-result" id="predictionResult">Loading...</div>
+    <div class="weather-data" id="weatherData">
+      <p><strong>Location:</strong> <span id="location">Loading...</span></p>
+      <p><strong>Weather:</strong> <span id="weather">Loading...</span></p>
+      <p><strong>Prediction Range:</strong> <span id="predictionRange">Loading...</span></p>
+    </div>
+    <div class="disease-border">
+      <div class="disease-image" id="diseaseImage">Image Placeholder</div>
+    </div>
+    <div class="disease-card" id="diseaseDescription">
+      <h3 id="diseaseName">Disease Name</h3>
+      <p><strong>Cause:</strong> <span id="cause">Loading...</span></p>
+      <p><strong>Symptoms:</strong> <span id="symptoms">Loading...</span></p>
+      <p><strong>Prevention:</strong> <span id="prevention">Loading...</span></p>
+      <p><strong>Management:</strong> <span id="management">Loading...</span></p>
+    </div>
+  </div>
+
+  <script>
+    const diseases = {
+      "Healthy": {
+        cause: "No disease present.",
+        symptoms: "Healthy green leaves, normal growth, and no visible lesions or discoloration.",
+        prevention: "Maintain balanced fertilization, proper irrigation, and field hygiene.",
+        management: "Continue regular monitoring and good agricultural practices.",
+        image: "healthy.jpg"
+      },
+      "Bacterial Leaf Blight": {
+        cause: "Xanthomonas oryzae bacteria, spread by rain, irrigation water, and wind.",
+        symptoms: "Yellowing and drying of leaf tips that progress downwards, leading to blight.",
+        prevention: "Use resistant rice varieties, avoid dense planting, and apply balanced fertilizer.",
+        management: "Remove infected plants, improve drainage, and apply copper-based bactericides if available.",
+        image: "blb.jpg"
+      },
+      "Bakanae": {
+        cause: "Fusarium fujikuroi fungus spread through contaminated seeds.",
+        symptoms: "Abnormally tall, thin seedlings with yellow leaves; many eventually die.",
+        prevention: "Use certified, treated seeds and avoid reusing contaminated seed lots.",
+        management: "Hot water treatment or fungicide seed treatment before planting.",
+        image: "bakanae.jpg"
+      },
+      "Brown Spot": {
+        cause: "Bipolaris oryzae fungus.",
+        symptoms: "Circular brown lesions on leaves that enlarge and merge, causing leaf drying.",
+        prevention: "Apply balanced fertilizer, especially nitrogen and potassium.",
+        management: "Use resistant varieties and apply fungicides when needed.",
+        image: "brown_spot.jpg"
+      },
+      "Rice Blast": {
+        cause: "Magnaporthe oryzae fungus.",
+        symptoms: "Diamond-shaped gray lesions on leaves; may also attack nodes and panicles.",
+        prevention: "Plant resistant varieties and avoid excessive nitrogen.",
+        management: "Apply fungicides during early infection and maintain balanced fertilization.",
+        image: "rice_blast.jpg"
+      },
+      "Sheath Blight": {
+        cause: "Rhizoctonia solani fungus.",
+        symptoms: "Grayish-green lesions with irregular borders on leaf sheaths; can spread to leaves.",
+        prevention: "Use resistant varieties, avoid dense planting, and manage water levels.",
+        management: "Apply fungicides and remove infected plant debris.",
+        image: "sheath_blight.jpg"
+      },
+      "Leaf Scald": {
+        cause: "Microdochium oryzae fungus.",
+        symptoms: "Grayish-white lesions with brown margins on leaves, often near the leaf tip.",
+        prevention: "Use resistant varieties and maintain proper field sanitation.",
+        management: "Apply fungicides and remove infected plant material.",
+        image: "leaf_scald.jpg"
+      },
+      "Stem Rot": {
+        cause: "Sclerotium oryzae fungus.",
+        symptoms: "Black lesions at the base of stems; plants lodge easily.",
+        prevention: "Improve drainage and remove stubbles after harvest.",
+        management: "Apply fungicides and practice crop rotation.",
+        image: "stem_rot.jpg"
+      },
+      "False Smut": {
+        cause: "Ustilaginoidea virens fungus.",
+        symptoms: "Greenish-black spore masses on grains, replacing kernels with powdery spores.",
+        prevention: "Use clean seeds and resistant varieties; avoid late-season nitrogen application.",
+        management: "Apply fungicides at booting stage and remove infected grains.",
+        image: "false_smut.jpg"
+      },
+      "Rice Tungro": {
+        cause: "Rice tungro bacilliform virus and rice tungro spherical virus, transmitted by leafhoppers.",
+        symptoms: "Yellow-orange leaves, stunted growth, poor tillering.",
+        prevention: "Plant resistant varieties, synchronize planting, and control leafhoppers.",
+        management: "Remove infected plants and apply insecticides against vectors.",
+        image: "rice_tungro.jpg"
+      },
+      "Neck Blast": {
+        cause: "Magnaporthe oryzae fungus affecting the neck region.",
+        symptoms: "Grayish lesions at the base of the panicle, causing partial or complete grain loss.",
+        prevention: "Use resistant varieties and apply fungicides at heading stage.",
+        management: "Remove infected plant debris and apply fungicides early.",
+        image: "neck_blast.jpg"
+      },
+      "Panicle Blight": {
+        cause: "Burkholderia glumae bacteria.",
+        symptoms: "Discolored panicles, aborted grains, and grayish-white spikelets.",
+        prevention: "Use resistant varieties and avoid high temperatures during flowering.",
+        management: "Apply bactericides and maintain proper field sanitation.",
+        image: "panicle_blight.jpg"
+      },
+      "Sheath Rot": {
+        cause: "Sarocladium oryzae fungus.",
+        symptoms: "Grayish-white lesions on sheaths, leading to panicle sterility or lodging.",
+        prevention: "Use resistant varieties, avoid excessive nitrogen, and maintain field hygiene.",
+        management: "Apply fungicides and remove infected plant material.",
+        image: "sheath_rot.jpg"
+      },
+      "Udbatta": {
+        cause: "Ephelis japonica fungus.",
+        symptoms: "Sterile panicles covered with a white fungal mass, preventing grain formation.",
+        prevention: "Use clean seeds and resistant varieties; practice crop rotation.",
+        management: "Remove infected plants and apply fungicides early.",
+        image: "udbatta.jpg"
+      },
+      "Red Stripe": {
+        cause: "Microbacterium spp. bacteria.",
+        symptoms: "Reddish-brown stripes on leaves, leading to reduced photosynthesis.",
+        prevention: "Use resistant varieties and maintain clean irrigation water.",
+        management: "Apply bactericides and remove infected plant debris.",
+        image: "red_stripe.jpg"
+      },
+      "Grain Discoloration": {
+        cause: "Fusarium spp. or Bipolaris spp. (fungal).",
+        symptoms: "Discolored grains (yellow, brown, or black); grains may shrivel or appear chalky.",
+        prevention: "Use certified disease-free seeds; rotate crops; maintain proper field sanitation.",
+        management: "Apply fungicides early; remove and destroy affected grains after harvest.",
+        image: "grain_discoloration.jpg"
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const predictedDisease = decodeURIComponent(urlParams.get("predictedDisease") || "Unknown Disease");
+      const temperature = decodeURIComponent(urlParams.get("temperature") || "N/A");
+      const humidity = decodeURIComponent(urlParams.get("humidity") || "N/A");
+      const rainfall = decodeURIComponent(urlParams.get("rainfall") || "N/A");
+      const province = decodeURIComponent(urlParams.get("province") || "N/A");
+      const municipality = decodeURIComponent(urlParams.get("municipality") || "N/A");
+      const barangay = decodeURIComponent(urlParams.get("barangay") || "N/A");
+      const predictionRange = decodeURIComponent(urlParams.get("predictionRange") || "N/A");
+
+      // Display prediction
+      document.getElementById("predictionResult").textContent = predictedDisease;
+
+      // Display weather data and location
+      document.getElementById("location").textContent = `${barangay}, ${municipality}, ${province}`;
+      document.getElementById("weather").textContent = `Temperature: ${temperature}°C, Humidity: ${humidity}%, Rainfall: ${rainfall}mm`;
+      document.getElementById("predictionRange").textContent = predictionRange;
+
+      // Display disease details
+      const disease = diseases[predictedDisease] || {
+        cause: "Unknown",
+        symptoms: "Unknown",
+        prevention: "Unknown",
+        management: "Unknown",
+        image: "https://via.placeholder.com/600x400?text=No+Image"
+      };
+
+      document.getElementById("diseaseName").textContent = predictedDisease;
+      document.getElementById("cause").textContent = disease.cause;
+      document.getElementById("symptoms").textContent = disease.symptoms;
+      document.getElementById("prevention").textContent = disease.prevention;
+      document.getElementById("management").textContent = disease.management;
+
+      const imgDiv = document.getElementById("diseaseImage");
+      imgDiv.textContent = "";
+      imgDiv.style.backgroundImage = `url('${disease.image}')`;
+
+      // Fallback for image loading failure
+      const img = new Image();
+      img.src = disease.image;
+      img.onerror = () => {
+        imgDiv.style.backgroundImage = "none";
+        imgDiv.textContent = "Image Not Available";
+      };
+    });
+  </script>
+</body>
+</html>

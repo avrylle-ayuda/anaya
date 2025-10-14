@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crop Health & Tips - ANAYA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f9f4;
+    }
+
+    /* Header */
+    .header {
+      position: relative;
+      background: linear-gradient(135deg, #64b651, #a5cd41);
+      padding: 0px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      color: white;
+      min-height: 300px;
+    }
+
+    /* Back Button */
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 28px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-button img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
+    }
+
+    /* Centered logo */
+    .header-center {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .header-center img {
+      height: 130px;
+    }
+
+    /* Avatar */
+    .user-icon {
+      height: 36px;
+      width: 36px;
+      object-fit: contain;
+    }
+
+    /* Page Title */
+    #page-title {
+      position: absolute;
+      bottom: -25px;
+      left: 20px;
+      font-size: 60px;
+      font-weight: 700;
+    }
+
+    /* Content */
+    .content {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+
+    .content h2 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-align: left;
+      color: #333;
+    }
+
+    /* Grid Buttons */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .tip-button {
+      border: none;
+      border-radius: 16px;
+      padding: 20px;
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+      text-align: center;
+    }
+
+    .tip-button:hover {
+      transform: translateY(-5px);
+    }
+
+    .pink-card {
+      background: linear-gradient(135deg, #ed1a6d, #f05f99);
+    }
+
+    .green-card {
+      background: linear-gradient(135deg, #64b651, #a5cd41);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background: #fff;
+      margin: auto;
+      padding: 20px;
+      border-radius: 12px;
+      width: 80%;
+      max-width: 800px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #000;
+    }
+
+    .modal h3 {
+      margin-top: 0;
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .modal p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <button class="back-button" onclick="window.location.href='home.html'">
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271220.png" alt="Back">
+    </button>
+
+    <div class="header-center">
+      <img src="ANAYA_logo.png.png" alt="ANAYA Logo" />
+    </div>
+
+    <div style="position: absolute; top: 20px; right: 20px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon" alt="User" />
+    </div>
+
+    <h2 id="page-title">Crop Health & Tips</h2>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <h2>Articles on Rice Crop Health</h2>
+    <div class="grid">
+      <button class="tip-button pink-card" onclick="openModal(1)">Soil Preparation for Healthy Rice</button>
+      <button class="tip-button green-card" onclick="openModal(2)">Managing Water Levels Effectively</button>
+
+      <button class="tip-button green-card" onclick="openModal(3)">Nutrient Management in Rice Fields</button>
+      <button class="tip-button pink-card" onclick="openModal(4)">Preventing Common Rice Diseases</button>
+
+      <button class="tip-button pink-card" onclick="openModal(5)">Weed Control Strategies</button>
+      <button class="tip-button green-card" onclick="openModal(6)">Pest Monitoring & Management</button>
+
+      <button class="tip-button green-card" onclick="openModal(7)">Best Practices for Harvesting</button>
+      <button class="tip-button pink-card" onclick="openModal(8)">Post-Harvest Grain Care</button>
+
+      <button class="tip-button pink-card" onclick="openModal(9)">Organic Rice Farming Tips</button>
+      <button class="tip-button green-card" onclick="openModal(10)">Climate-Smart Rice Farming</button>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="modal1" class="modal"><div class="modal-content"><span class="close" onclick="closeModal(1)">&times;</span><h3>Soil Preparation for Healthy Rice</h3><p>Good soil preparation is the foundation of a successful rice crop. Plowing, leveling, and removing weeds ensures that rice plants grow in a well-aerated and nutrient-rich environment. Proper soil structure also improves root penetration and water retention, both of which are crucial for strong plant growth.</p><p>In many rice-producing regions, farmers practice puddling, which involves tilling soil under wet conditions. This reduces water seepage and helps retain nutrients near the root zone. Proper drainage channels should also be established to prevent water stagnation that could promote pests and diseases.</p><p>Soil testing before planting is recommended to identify nutrient deficiencies. Adding organic matter, such as compost or green manure, improves soil fertility and enhances the microbial ecosystem that supports healthy rice growth.</p></div></div>
+
+  <div id="modal2" class="modal"><div class="modal-content"><span class="close" onclick="closeModal(2)">&times;</span><h3>Managing Water Levels Effectively</h3><p>Water management plays a vital role in rice cultivation since rice is highly dependent on standing water during most of its growth stages. Controlled flooding ensures weed suppression, nutrient availability, and stable growth of seedlings.</p><p>Alternating wetting and drying (AWD) is a proven water-saving technique where the field is allowed to partially dry before re-irrigation. This method reduces methane emissions and water use while maintaining or even increasing yields.</p><p>Farmers should ensure proper field bunds and levees are constructed to prevent water leakage. Monitoring water depth regularly ensures rice plants receive optimal hydration throughout the cropping season.</p></div></div>
+
+  <div id="modal3" class="modal"><div class="modal-content"><span class="close" onclick="closeModal(3)">&times;</span><h3>Nutrient Management in Rice Fields</h3><p>Balanced nutrient management is essential for healthy rice production. Nitrogen, phosphorus, and potassium are the primary macronutrients needed by rice plants. Deficiency in any of these can cause stunted growth, reduced tillering, or poor grain filling.</p><p>Integrated nutrient management involves combining organic fertilizers like compost or farmyard manure with inorganic fertilizers to maintain soil fertility. Slow-release fertilizers are also recommended to prevent nutrient leaching and wastage.</p><p>Timely fertilizer application based on rice growth stages—such as tillering, panicle initiation, and flowering—ensures efficient nutrient uptake and maximizes yields without environmental harm.</p></div></div>
+
+  <div id="modal4" class="modal"><div class="modal-content"><span class="close" onclick="closeModal(4)">&times;</span><h3>Preventing Common Rice Diseases</h3><p>Rice is vulnerable to a range of diseases such as blast, sheath blight, and bacterial leaf blight. Preventing these requires a combination of resistant varieties, crop rotation, and good water management practices.</p><p>Seed treatment before sowing can significantly reduce fungal infections. Regular monitoring of fields allows early detection and treatment of diseases with biological or chemical control methods.</p><p>Maintaining proper spacing between plants improves air circulation, reducing humidity levels that favor disease spread. Farmers should also avoid excessive nitrogen application, which can make rice plants more susceptible to infections.</p></div></div>
+
+  <div id="modal5" class="modal"><div class="modal-content"><span class="close" onclick="closeModal(5)">&times;</span><h3>Weed Control Strategies</h3><p>Weeds compete with rice plants for nutrients, sunlight, and water, often reducing yield significantly. Effective weed control begins with land preparation, where plowing and leveling can reduce initial weed pressure.</p><p>Manual weeding and mechanical weeders are widely used, but herbicides are also effective when applied properly. Timing of application is critical to avoid harming rice seedlings while maximizing weed suppression.</p><p>Integrated weed management combines cultural, mechanical, and chemical methods for sustainable control. Maintaining proper water levels during the early growth stages can also reduce weed germination.</p></div></div>
+
+  <div id="modal6" class="modal"><div class="modal-content"><span class="close" onclick="closeModal(6)">&times;</span><h3>Pest Monitoring & Management</h3><p>Pests such as stem borers, leaf folders, and brown planthoppers can cause significant yield losses in rice. Monitoring pest populations is essential for timely intervention and preventing outbreaks.</p><p>Integrated Pest Management (IPM) emphasizes the use of natural predators, resistant varieties, and biological controls before resorting to chemical pesticides. This approach minimizes environmental damage and delays pest resistance.</p><p>Farmers are encouraged to set up pheromone traps and conduct regular field scouting. Early action prevents minor infestations from escalating into major crop damage.</p></div></div>
+
+  <div id="modal7" class="modal"><div class="modal-content"><span class="close" onclick="closeModal(7)">&times;</span><h3>Best Practices for Harvesting</h3><p>Harvesting rice at the right time is crucial for maximizing both yield and grain quality. Harvesting too early results in unfilled grains, while late harvesting increases grain shattering and losses.</p><p>Farmers should monitor grain maturity—typically when 80–85% of the grains on the panicle have turned golden yellow. Using mechanical harvesters can reduce labor costs and improve efficiency.</p><p>Proper handling after harvest, such as cleaning and drying, ensures that the grains retain their market value and are less prone to pest or fungal damage during storage.</p></div></div>
+
+  <div id="modal8" class="modal"><div class="modal-content"><span class="close" onclick="closeModal(8)">&times;</span><h3>Post-Harvest Grain Care</h3><p>After harvesting, proper post-harvest management is essential to maintain rice quality. Immediate drying of grains to safe moisture levels prevents fungal growth and discoloration.</p><p>Storage structures should be clean, dry, and well-ventilated to reduce insect infestation and mold. Using airtight containers or hermetic bags helps extend shelf life and preserve grain quality.</p><p>Regular monitoring of stored grains for pests ensures that problems are detected early. Farmers may also consider milling only when necessary to keep rice fresh for longer periods.</p></div></div>
+
+  <div id="modal9" class="modal"><div class="modal-content"><span class="close" onclick="closeModal(9)">&times;</span><h3>Organic Rice Farming Tips</h3><p>Organic rice farming avoids synthetic chemicals and emphasizes the use of natural inputs and ecological processes. Farmers rely on compost, green manure, and crop rotation to maintain soil fertility.</p><p>Biological pest control methods, such as introducing natural enemies of rice pests, help reduce dependence on chemical pesticides. Selecting disease-resistant varieties also supports organic production.</p><p>Though yields may initially be lower, organic rice farming can fetch higher market prices and contribute to long-term soil and environmental health.</p></div></div>
+
+  <div id="modal10" class="modal"><div class="modal-content"><span class="close" onclick="closeModal(10)">&times;</span><h3>Climate-Smart Rice Farming</h3><p>Climate change poses new challenges to rice farmers, including unpredictable rainfall, rising temperatures, and increased pest pressure. Climate-smart practices help farmers adapt and remain resilient.</p><p>Adopting drought-tolerant or flood-resistant rice varieties ensures stable yields under extreme weather. Water-saving techniques such as AWD reduce both water use and greenhouse gas emissions.</p><p>Digital tools and mobile apps for weather forecasting and crop monitoring empower farmers to make informed decisions. Community-based adaptation strategies also strengthen local food security in the face of climate risks.</p></div></div>
+
+  <script>
+    function openModal(id) {
+      document.getElementById('modal' + id).style.display = 'block';
+    }
+    function closeModal(id) {
+      document.getElementById('modal' + id).style.display = 'none';
+    }
+    window.onclick = function(event) {
+      for (let i = 1; i <= 10; i++) {
+        let modal = document.getElementById('modal' + i);
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+    }
+  </script>
+</body>
+</html>

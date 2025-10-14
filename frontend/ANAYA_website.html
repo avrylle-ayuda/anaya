@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Base - ANAYA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f9f4;
+    }
+
+    /* Header */
+    .header {
+      position: relative;
+      background: linear-gradient(135deg, #64b651, #a5cd41);
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      color: white;
+      min-height: 300px;
+      width: 100%;
+    }
+
+    .menu-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .back-button {
+      font-size: 28px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-button img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
+    }
+
+    .header-center {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .header-center img {
+      height: 130px;
+    }
+
+    .user-icon {
+      height: 36px;
+      width: 36px;
+      object-fit: contain;
+    }
+
+    #title {
+      position: absolute;
+      bottom: -25px;
+      left: 20px;
+      font-size: 70px;
+      font-weight: 700;
+    }
+
+    /* Search bar (copied from home.html) */
+    .search-bar {
+      margin: 20px auto;
+      max-width: 600px;
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 25px;
+      padding: 8px 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .search-bar input {
+      border: none;
+      flex: 1;
+      padding: 10px;
+      font-size: 14px;
+      outline: none;
+      font-family: 'Nunito', sans-serif;
+    }
+    .search-bar button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .search-bar button img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Disease layout */
+    .form-section {
+      padding: 25px 20px 40px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+        .disease-border {
+      border-radius: 10px;
+      padding: 10px;
+      background: linear-gradient(135deg, #ed1a6d, #f05f99);
+      margin-bottom: 20px;
+      display: inline-block;
+      width: 103%;
+      box-sizing: border-box;
+    }
+
+    .disease-image {
+      width: 100%;
+      height: auto; /* ✅ let the height adjust dynamically */
+      aspect-ratio: 16/9; /* ✅ keeps images proportional, same style as cards */
+      border-radius: 6px;
+      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #333;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .disease-card {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #64b651, #a5cd41);
+      border-radius: 10px;
+      text-align: left;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+      color: #ffffff;
+    }
+
+    .disease-card h3 {
+      font-size: 22px;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    .disease-card p {
+      font-size: 15px;
+      margin: 6px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="menu-container">
+      <button class="back-button" onclick="window.location.href='home.html'">
+        <img src="https://cdn-icons-png.flaticon.com/512/271/271220.png" alt="Back">
+      </button>
+    </div>
+    <div class="header-center">
+      <img src="ANAYA_logo.png.png" alt="ANAYA Logo" />
+    </div>
+    <div style="position: absolute; top: 20px; right: 20px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon" alt="User" />
+    </div>
+    <h2 id="title">Knowledge Base</h2>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search diseases..." onkeyup="filterDiseases()" />
+    <button><img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search Icon"></button>
+  </div>
+
+  <!-- Disease Entries -->
+  <div class="form-section" id="diseaseList">
+    <!-- Example (will be generated via JS) -->
+  </div>
+
+  <script>
+    const diseases = [
+      {
+        name: "Bacterial Leaf Blight (BLB)",
+        cause: "Xanthomonas oryzae bacteria, spread by rain, irrigation water, and wind.",
+        symptoms: "Yellowing and drying of leaf tips that progress downwards, leading to blight.",
+        prevention: "Use resistant rice varieties, avoid dense planting, and apply balanced fertilizer.",
+        management: "Remove infected plants, improve drainage, and apply copper-based bactericides if available.",
+        image: "blb.jpg"
+      },
+      {
+        name: "Bacterial Leaf Streak",
+        cause: "Xanthomonas oryzae bacteria infecting leaf tissue.",
+        symptoms: "Narrow, dark brown streaks along the veins of leaves.",
+        prevention: "Use disease-free seeds and resistant varieties. Avoid excessive nitrogen fertilizer.",
+        management: "Practice field sanitation, rotate crops, and use clean irrigation water.",
+        image: "bacterial_leaf_streak.jpg"
+      },
+      {
+        name: "Bakanae (Foolish Seedling Disease)",
+        cause: "Fusarium fujikuroi fungus spread through contaminated seeds.",
+        symptoms: "Abnormally tall, thin seedlings with yellow leaves; many eventually die.",
+        prevention: "Use certified, treated seeds and avoid reusing contaminated seed lots.",
+        management: "Hot water treatment or fungicide seed treatment before planting.",
+        image: "bakanae.jpg"
+      },
+      {
+        name: "Brown Spot",
+        cause: "Bipolaris oryzae fungus.",
+        symptoms: "Circular brown lesions on leaves that enlarge and merge.",
+        prevention: "Apply balanced fertilizer, especially nitrogen and potassium.",
+        management: "Use resistant varieties and apply fungicides when needed.",
+        image: "brown_spot.jpg"
+      },
+      {
+        name: "Grain Discoloration",
+        cause: "Fusarium spp. or Bipolaris spp. (fungal).",
+        symptoms: "Discolored grains (yellow, brown, or black); grains may shrivel or appear chalky.",
+        prevention: "Use certified disease-free seeds; rotate crops; maintain proper field sanitation.",
+        management: "Apply fungicides early; remove and destroy affected grains after harvest.",
+        image: "grain_discoloration.jpg"
+      }
+      // ✅ Add the rest of your diseases here...
+    ];
+
+    function renderDiseases(list) {
+      const container = document.getElementById("diseaseList");
+      container.innerHTML = "";
+      list.forEach(d => {
+        const diseaseHTML = `
+         <div class="disease-border">
+  <div class="disease-image" style="background-image:url('${d.image}')"></div>
+</div>
+<div class="disease-card">
+  <h3>${d.name}</h3>
+  <p><strong>Cause:</strong> ${d.cause}</p>
+  <p><strong>Symptoms:</strong> ${d.symptoms}</p>
+  <p><strong>Prevention:</strong> ${d.prevention}</p>
+  <p><strong>Management:</strong> ${d.management}</p>
+</div>
+        `;
+        container.innerHTML += diseaseHTML;
+      });
+    }
+
+    function filterDiseases() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = diseases.filter(d => d.name.toLowerCase().includes(query));
+      renderDiseases(filtered);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => renderDiseases(diseases));
+  </script>
+</body>
+</html>

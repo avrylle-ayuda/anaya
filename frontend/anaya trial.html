@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disease Prediction - ANAYA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f4f7f6;
+    }
+    h1 {
+      color: #2a6b2a;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+    .low {
+      background: #e3f2fd;
+      border: 1px solid #90caf9;
+      color: #1565c0;
+    }
+    .medium {
+      background: #fff9c4;
+      border: 1px solid #fdd835;
+      color: #f57f17;
+    }
+    .high {
+      background: #ffebee;
+      border: 1px solid #ef5350;
+      color: #b71c1c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rice Crop Disease Prediction</h1>
+
+  <div id="resultBox" class="result">Fetching prediction...</div>
+
+  <script>
+    const apiKey = "2e9a31d8e63514feb538670cad62a9df"; // 🔑 replace with your OpenWeather key
+    const lat = localStorage.getItem("selectedLat");
+    const lon = localStorage.getItem("selectedLon");
+
+    if (!lat || !lon) {
+      document.getElementById("resultBox").innerText =
+        "No location found. Please select a location first.";
+    } else {
+      fetchWeatherAndPredict(lat, lon);
+    }
+
+    async function fetchWeatherAndPredict(lat, lon) {
+      try {
+        // 1. Fetch weather
+        const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+        const weatherRes = await fetch(weatherUrl);
+        const weatherData = await weatherRes.json();
+
+        if (weatherData.cod !== 200) {
+          document.getElementById("resultBox").innerText =
+            "Error fetching weather: " + weatherData.message;
+          return;
+        }
+
+        // Extract climate vars
+        const temp = weatherData.main.temp;
+        const hum = weatherData.main.humidity;
+        const wind = weatherData.wind.speed;
+        const rain = weatherData.rain ? weatherData.rain["1h"] || 0 : 0;
+
+        console.log("Weather Data:", { temp, hum, wind, rain });
+
+        // 2. Send to Flask backend
+        const res = await fetch("http://127.0.0.1:5000/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            MAX_TEMP: temp,
+            MIN_TEMP: temp - 3,
+            AVE_TEMP: temp - 1,
+            REL_HUM: hum,
+            WIND_SPEED: wind,
+            PRECIP_PATTERNS: rain
+          })
+        });
+
+        const data = await res.json();
+        const score = data.prediction;
+
+        // 3. Categorize risk + disease
+        let riskLevel = "";
+        let diseaseName = "";
+        let cssClass = "";
+
+        if (score < 0.33) {
+          riskLevel = "Low Risk";
+          diseaseName = "Likely healthy or minor nutrient deficiency";
+          cssClass = "low";
+        } else if (score < 0.66) {
+          riskLevel = "Medium Risk";
+          diseaseName = "Possible Brown Spot or Narrow Brown Spot";
+          cssClass = "medium";
+        } else {
+          riskLevel = "High Risk";
+          diseaseName = "Possible Rice Blast or Bacterial Leaf Blight";
+          cssClass = "high";
+        }
+
+        // 4. Show result
+        const box = document.getElementById("resultBox");
+        box.className = `result ${cssClass}`;
+        box.innerHTML = `
+          <strong>Prediction Risk Score:</strong> ${score.toFixed(4)} <br>
+          <strong>Risk Level:</strong> ${riskLevel} <br>
+          <strong>Likely Disease:</strong> ${diseaseName}
+        `;
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById("resultBox").innerText =
+          "Something went wrong. Check console.";
+      }
+    }
+  </script>
+</body>
+</html>

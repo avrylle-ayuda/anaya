@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seasonal Climate - ANAYA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f9f4;
+    }
+
+    /* Header */
+    .header {
+      position: relative;
+      background: linear-gradient(135deg, #64b651, #a5cd41);
+      padding: 0px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      color: white;
+      min-height: 300px;
+    }
+
+    /* Back Button (from your source) */
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 28px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-button img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
+    }
+
+    /* Centered logo */
+    .header-center {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .header-center img {
+      height: 130px;
+    }
+
+    /* Avatar */
+    .user-icon {
+      height: 36px;
+      width: 36px;
+      object-fit: contain;
+    }
+
+    /* Title instead of greeting */
+    #page-title {
+      position: absolute;
+      bottom: -25px;
+      left: 20px;
+      font-size: 60px;
+      font-weight: 700;
+    }
+
+    /* Climate Section */
+    .content {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      text-align: center;
+      border: 10px solid #ed1a6d; /* pink border */
+    }
+
+    .card h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 70%; /* Aspect ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .iframe-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <!-- Back Button -->
+    <button class="back-button" onclick="window.location.href='home.html'">
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271220.png" alt="Back">
+    </button>
+
+    <!-- Centered Logo -->
+    <div class="header-center">
+      <img src="ANAYA_logo.png.png" alt="ANAYA Logo" />
+    </div>
+
+    <!-- Avatar -->
+    <div style="position: absolute; top: 20px; right: 20px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon" alt="User" />
+    </div>
+
+    <!-- Page Title -->
+    <h2 id="page-title">Seasonal Climate</h2>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="card">
+      <h2>Seasonal Climate Data</h2>
+      <div class="iframe-container">
+        <iframe src="https://docs.google.com/spreadsheets/d/1OESEhHSM9cWd3vTNrRplhX-1AUgtaaWmKoXy3C2DlqE/preview"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBeBzi3S6aMVhRje2oYjSidAgeAhWnQSYs",
+      authDomain: "anaya-trial-25626.firebaseapp.com",
+      projectId: "anaya-trial-25626",
+      storageBucket: "anaya-trial-25626.firebasestorage.app",
+      messagingSenderId: "318384671749",
+      appId: "1:318384671749:web:3e99da15a3d3836251606c",
+      measurementId: "G-QL0RDLTT87"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    function logout() {
+      auth.signOut().then(() => {
+        window.location.href = "signin.html";
+      });
+    }
+  </script>
+</body>
+</html>

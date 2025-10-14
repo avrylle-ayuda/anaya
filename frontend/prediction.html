@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disease Prediction - ANAYA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f9f4;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      position: relative;
+      background: linear-gradient(135deg, #64b651, #a5cd41);
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      color: white;
+      min-height: 300px;
+      width: 100%;
+    }
+
+    .menu-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .back-button {
+      font-size: 28px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-button img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
+    }
+
+    .header-center {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .header-center img {
+      height: 130px;
+    }
+
+    .user-icon {
+      height: 36px;
+      width: 36px;
+      object-fit: contain;
+    }
+
+    #title {
+      position: absolute;
+      bottom: -25px;
+      left: 20px;
+      font-size: 70px;
+      font-weight: 700;
+    }
+
+    .form-section {
+      padding: 40px 20px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin: 25px 0;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: 2px solid #64b651;
+      border-radius: 10px;
+      font-size: 16px;
+      background: #f9f9f9;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364b651' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .form-group select:focus {
+      outline: none;
+      border-color: #a5cd41;
+    }
+
+    .weather-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #64b651, #a5cd41);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .weather-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .weather-data {
+      margin-top: 10px;
+      padding: 10px;
+      border: 2px solid #64b651;
+      border-radius: 10px;
+      background: #f9f9f9;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .predict-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #ed1a6d, #f05f99);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      margin-top: 20px;
+    }
+
+    .predict-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .predict-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    #todayDate {
+      font-size: 30px;
+      font-weight: 800;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="menu-container">
+      <button class="back-button" onclick="window.location.href='home.html'">
+        <img src="https://cdn-icons-png.flaticon.com/512/271/271220.png" alt="Back" style="width: 24px; height: 24px;">
+      </button>
+    </div>
+    <div class="header-center">
+      <img src="ANAYA_logo.png.png" alt="ANAYA Logo" />
+    </div>
+    <div style="position: absolute; top: 20px; right: 20px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon" alt="User" />
+    </div>
+    <h2 id="title">Disease Prediction</h2>
+  </div>
+
+  <div class="form-section">
+    <div class="form-group">
+      <label>Today</label>
+      <div id="todayDate"></div>
+    </div>
+    <div class="form-group">
+      <label>Location in CALABARZON</label>
+      <select id="provinceSelect" onchange="updateMunicipality()">
+        <option value="">Select Province</option>
+        <option value="Cavite">Cavite</option>
+        <option value="Laguna">Laguna</option>
+        <option value="Batangas">Batangas</option>
+        <option value="Rizal">Rizal</option>
+        <option value="Quezon">Quezon</option>
+      </select>
+      <select id="municipalitySelect" onchange="updateBarangay()">
+        <option value="">Select Municipality</option>
+      </select>
+      <select id="barangaySelect" disabled>
+        <option value="">Select Barangay</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Climate Variables</label>
+      <button id="weatherBtn" class="weather-btn" onclick="fetchWeatherData()">Connect to Weather API</button>
+      <div id="weatherData" class="weather-data" style="display: none;"></div>
+    </div>
+    <div class="form-group">
+      <label>Prediction Range</label>
+      <select id="predictionRange">
+        <option value="1week">1 Week</option>
+        <option value="1month">1 Month</option>
+        <option value="3months">3 Months</option>
+      </select>
+    </div>
+    <button class="predict-btn" onclick="makePrediction()">Predict</button>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBeBzi3S6aMVhRje2oYjSidAgeAhWnQSYs",
+      authDomain: "anaya-trial-25626.firebaseapp.com",
+      projectId: "anaya-trial-25626",
+      storageBucket: "anaya-trial-25626.firebasestorage.app",
+      messagingSenderId: "318384671749",
+      appId: "1:318384671749:web:3e99da15a3d3836251606c",
+      measurementId: "G-QL0RDLTT87"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Logout function
+    function logout() {
+      auth.signOut().then(() => {
+        window.location.href = "signin.html";
+      });
+    }
+
+    // Municipalities and barangays
+    const municipalities = {
+      Cavite: [
+        "City of Bacoor", "City of Carmona", "City of Dasmariñas", "City of General Trias", "City of Imus",
+        "City of Tagaytay", "Trece Martires City", "Alfonso", "Amadeo", "General Emilio Aguinaldo",
+        "Indang", "Kawit", "Magallanes", "Maragondon", "Mendez", "Naic", "Noveleta", "Rosario",
+        "Silang", "Tanza", "Ternate"
+      ],
+      Laguna: [
+        "City of Biñan", "City of Cabuyao", "City of Calamba", "City of San Pablo", "City of San Pedro",
+        "City of Santa Rosa", "Alaminos", "Bay", "Calauan", "Cavinti", "Famy", "Kalayaan", "Liliw",
+        "Los Baños", "Luisiana", "Lumban", "Mabitac", "Magdalena", "Majayjay", "Nagcarlan", "Paete",
+        "Pagsanjan", "Pakil", "Pangil", "Pila", "Rizal", "Santa Cruz", "Santa Maria", "Siniloan", "Victoria"
+      ],
+      Batangas: [
+        "City of Batangas", "City of Calaca", "City of Lipa", "City of Santo Tomas", "City of Tanauan",
+        "Agoncillo", "Alitagtag", "Balayan", "Balete", "Bauan", "Calatagan", "Cuenca", "Ibaan", "Laurel",
+        "Lemery", "Lian", "Lobo", "Mabini", "Malvar", "Mataasnakahoy", "Nasugbu", "Padre Garcia",
+        "Rosario", "San Jose", "San Juan", "San Luis", "San Nicolas", "San Pascual", "Santa Teresita",
+        "Taal", "Talisay", "Taysan", "Tingloy", "Tuy"
+      ],
+      Rizal: [
+        "City of Antipolo", "Angono", "Baras", "Binangonan", "Cainta", "Cardona", "Jalajala",
+        "Morong", "Pililla", "Rodriguez", "San Mateo", "Tanay", "Taytay", "Teresa"
+      ],
+      Quezon: [
+        "City of Tayabas", "Agdangan", "Alabat", "Atimonan", "Buenavista", "Burdeos", "Calauag",
+        "Candelaria", "Casiguran", "Claveria", "Dolores", "General Luna", "General Nakar", "Guinayangan",
+        "Gumaca", "Infanta", "Jomalig", "Lopez", "Lucban", "Lucena", "Macalelon", "Mauban"
+      ]
+    };
+
+    const barangays = {
+      Cavite: {
+        "City of Bacoor": ["Alima", "Aniban", "Daang Bukid", "Habay", "Mambog"],
+        "City of Carmona": ["Barangay 1", "Barangay 2", "Barangay 3", "Barangay 4", "Barangay 5"],
+        "City of Dasmariñas": ["Burol", "Paliparan", "Salawag", "San Agustin", "Sinclair"],
+        "City of General Trias": ["Biclatan", "Gomez", "Javalera", "Navarro", "San Francisco"],
+        "City of Imus": ["Alapan", "Bayan Luma", "Bucandala", "Malagasang", "Tanzang Luma"],
+        "City of Tagaytay": ["Asisan", "Mabolo", "Maharlika East", "Patutong Malaki", "Sungay"],
+        "Trece Martires City": ["Bucal", "Cabuco", "De Ocampo", "Inocencio", "San Agustin"],
+        Alfonso: ["Amuyong", "Barangay 1", "Barangay 2", "Barangay 3", "Luksuhin"],
+        Amadeo: ["Banaba", "Barangay 1", "Barangay 2", "Barangay 3", "Poblacion"],
+        "General Emilio Aguinaldo": ["Batas", "Caylaway", "Dalig", "Kabulusan", "Tabora"],
+        Indang: ["Alulod", "Bucal", "Harasan", "Kayquit", "Pulo"],
+        Kawit: ["Binakayan", "Marulas", "Poblacion", "Santa Isabel", "Tabon"],
+        Magallanes: ["Banca", "Balayungan", "Macatoc", "Poblacion", "Tua"],
+        Maragondon: ["Bucal", "Pantihan", "Poblacion", "Santa Mercedes", "Talipusngo"],
+        Mendez: ["Anuling", "Asis", "Banaba", "Poblacion", "San Antonio"],
+        Naic: ["Bagong Kalsada", "Balsahan", "Halang", "Labac", "Munting Mapino"],
+        Noveleta: ["Magdiwang", "Poblacion", "Salcedo", "San Jose", "Santa Rosa"],
+        Rosario: ["Bansalangin", "Kanluran", "Ligtong", "Poblacion", "Silangan"],
+        Silang: ["Barandal", "Biga", "Luzviminda", "Poblacion", "Sabutan"],
+        Tanza: ["Amaya", "Bagtas", "Biga", "Calibuyo", "Poblacion"],
+        Ternate: ["Bucana", "Poblacion", "San Jose", "Santa Monica", "Sapang"]
+      },
+      Laguna: {
+        "City of San Pablo": ["I-A (Sambat)", "I-B (City Sub Riverside)", "I-C (Bagong Bayan)", "II-A (Triangulo / Guadalupe 2)", "II-B (Guadalupe 1)", "II-C (Unson)", "II-D (Bulante)", "II-E (San Anton)", "II-F (Villa Rey)", "III-A (Hermanos Belen)", "III-B", "III-C (Labak / De Roma)", "III-D (Villongco)", "III-E", "III-F (Balagtas)", "IV-A", "IV-B", "IV-C", "V-A", "V-B", "V-C", "V-D", "VI-A (Mavenida)", "VI-B (Sabang Mabini)", "VI-C (Bagong Pook)", "VI-D (Lakeside)", "VI-E (YMCA)", "VII-A (P. Alcantara)", "VII-B", "VII-C", "VII-D", "VII-E", "Atisan", "Bautista", "Concepcion (Bunot)", "Del Remedio (Wawa)", "Dolores", "San Antonio 1 (Balanga)", "San Antonio 2 (Sapa)", "San Bartolome (Matang-ag)", "San Buenaventura (Palakpakin)", "San Crispin (Lumbangan)", "San Cristobal", "San Diego (Tiim)", "San Francisco (Calihan)", "San Gabriel (Butucan)", "San Gregorio", "San Ignacio", "San Isidro (Balagbag)", "San Joaquin", "San Jose (Malamig)", "San Juan", "San Lorenzo (Saluyan)", "San Lucas 1 (Malinaw)", "San Lucas 2", "San Marcos (Tikew)", "San Mateo (Imok)", "San Miguel (Balatuin)", "San Nicolas (Mag-ampon)", "San Pedro", "San Rafael (Buluburan)", "San Roque (Sambat)", "San Vicente", "Santa Ana", "Santa Catalina (Sandig)", "Santa Cruz (Putol)", "Santa Elena", "Santa Filomena (Banlagin)", "Santa Isabel", "Santa Maria", "Santa Maria Magdalena (Boe / Kuba)", "Santa Monica", "Santa Verónica I", "Santiago I (Bulaho)", "Santiago II (Bulaho)", "Santisimo Rosario (Balagbag)", "Santo Angel (Ilog)", "Santo Cristo", "Santo Niño (Arsum)", "Soledad (Macopa)", "Santa Verónica II"],
+        "City of Biñan": ["Bungahan", "Canlalay", "Loma", "Malaban", "San Vicente"],
+        "City of Cabuyao": ["Banay-Banay", "Casile", "Diezmo", "Lansang", "Marinig"],
+        "City of Calamba": ["Banlic", "Bucal", "Halang", "Parian", "Real"],
+        "City of San Pedro": ["Bagong Silang", "Cuyab", "Landayan", "Magsaysay", "San Antonio"],
+        "City of Santa Rosa": ["Aplaya", "Balibago", "Caingin", "Labas", "Pulong Santa Cruz"]
+      },
+      Batangas: {
+        "City of Batangas": ["Balagtas", "Bolbok", "Concepcion", "Pallocan", "San Isidro"],
+        "City of Lipa": ["Anilao", "Bulacnin", "Mabini", "Poblacion", "Sabang"],
+        "City of Tanauan": ["Banadero", "Bayan", "Boot", "Malaking Pulo", "San Francisco"]
+      },
+      Rizal: {
+        "City of Antipolo": ["Bagong Nayon", "Calawis", "Dalig", "Inarawan", "San Jose"]
+      },
+      Quezon: {
+        "City of Tayabas": ["Alitao", "Banilad", "Dapdap", "Ibabang Kawayan", "Lalo"]
+      }
+    };
+
+    function updateMunicipality() {
+      const provinceSelect = document.getElementById("provinceSelect");
+      const municipalitySelect = document.getElementById("municipalitySelect");
+      const barangaySelect = document.getElementById("barangaySelect");
+
+      municipalitySelect.innerHTML = '<option value="">Select Municipality</option>';
+      barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+      barangaySelect.disabled = true;
+
+      const province = provinceSelect.value;
+      if (province) {
+        const munList = municipalities[province] || [];
+        munList.forEach(mun => {
+          const option = document.createElement("option");
+          option.value = mun;
+          option.text = mun;
+          municipalitySelect.appendChild(option);
+        });
+      }
+    }
+
+    function updateBarangay() {
+      const provinceSelect = document.getElementById("provinceSelect");
+      const municipalitySelect = document.getElementById("municipalitySelect");
+      const barangaySelect = document.getElementById("barangaySelect");
+
+      barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+      barangaySelect.disabled = true;
+
+      const province = provinceSelect.value;
+      const municipality = municipalitySelect.value;
+      if (province && municipality && barangays[province] && barangays[province][municipality]) {
+        barangaySelect.disabled = false;
+        barangays[province][municipality].forEach(barangay => {
+          const option = document.createElement("option");
+          option.value = barangay;
+          option.text = barangay;
+          barangaySelect.appendChild(option);
+        });
+      }
+    }
+
+    async function fetchWeatherData() {
+      const provinceSelect = document.getElementById("provinceSelect");
+      const municipalitySelect = document.getElementById("municipalitySelect");
+      const weatherBtn = document.getElementById("weatherBtn");
+      const weatherData = document.getElementById("weatherData");
+
+      if (!provinceSelect.value || !municipalitySelect.value) {
+        alert("Please select a province and municipality first.");
+        return;
+      }
+
+      weatherBtn.disabled = true;
+      weatherBtn.textContent = "Fetching...";
+
+      try {
+        const response = await fetch('http://localhost:5000/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            province: provinceSelect.value,
+            municipality: municipalitySelect.value,
+            barangay: document.getElementById("barangaySelect").value || '',
+            predictionRange: document.getElementById("predictionRange").value
+          })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          weatherData.textContent = `Temperature: ${data.temperature}°C, Humidity: ${data.humidity}%, Rainfall: ${data.rainfall}mm`;
+          weatherData.style.display = 'block';
+        } else {
+          throw new Error(data.error || 'Failed to fetch weather data');
+        }
+      } catch (error) {
+        weatherData.textContent = 'Failed to fetch weather data. Using default values: Temperature: 25°C, Humidity: 80%, Rainfall: 5mm';
+        weatherData.style.display = 'block';
+        console.error('Weather fetch error:', error);
+      } finally {
+        weatherBtn.disabled = false;
+        weatherBtn.textContent = "Connect to Weather API";
+      }
+    }
+
+    async function makePrediction() {
+      const province = document.getElementById("provinceSelect").value;
+      const municipality = document.getElementById("municipalitySelect").value;
+      const barangay = document.getElementById("barangaySelect").value;
+      const predictionRange = document.getElementById("predictionRange").value;
+      const predictBtn = document.querySelector(".predict-btn");
+
+      if (!province || !municipality || !barangay) {
+        alert("Please complete all fields.");
+        return;
+      }
+
+      predictBtn.disabled = true;
+      predictBtn.textContent = "Predicting...";
+
+      try {
+        const response = await fetch('http://localhost:5000/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            province,
+            municipality,
+            barangay,
+            predictionRange
+          })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          const queryParams = new URLSearchParams({
+            province: encodeURIComponent(province),
+            municipality: encodeURIComponent(municipality),
+            barangay: encodeURIComponent(barangay),
+            predictionRange: encodeURIComponent(predictionRange),
+            predictedDisease: encodeURIComponent(data.predictedDisease),
+            temperature: encodeURIComponent(data.temperature),
+            humidity: encodeURIComponent(data.humidity),
+            rainfall: encodeURIComponent(data.rainfall)
+          }).toString();
+          window.location.href = `results.html?${queryParams}`;
+        } else {
+          throw new Error(data.error || 'Prediction failed');
+        }
+      } catch (error) {
+        alert(`Prediction error: ${error.message}`);
+        console.error('Prediction error:', error);
+      } finally {
+        predictBtn.disabled = false;
+        predictBtn.textContent = "Predict";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const today = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const dateString = today.toLocaleString('en-US', options);
+      document.getElementById('todayDate').textContent = dateString;
+    });
+  </script>
+</body>
+</html>
