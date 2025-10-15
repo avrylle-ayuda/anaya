@@ -220,9 +220,13 @@ def serve_html(path):
         return render_template(path)
     return render_template('home.html')
 
-@app.route('/static/<path:filename>')
-def static_files(filename):
-    return send_from_directory('static', filename)
+@app.route('/static/<path:path>')
+def static_files(path):
+    return send_from_directory('static', path)
+
+@app.route('/favicon.ico')
+def no_favicon():
+    return '', 204  # 204 No Content stops the request without error
 
 # ---------------- Prediction Endpoint ----------------
 @app.route('/predict', methods=['POST'])
