@@ -1,10 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 import xgboost as xgb
 import json
 import numpy as np
 from datetime import datetime
 import requests
+import os
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -171,7 +172,6 @@ def get_weather_from_open_meteo(lat, lon):
         humidity = data['hourly']['relative_humidity_2m'][latest_index]
         rainfall = data['hourly']['precipitation'][latest_index]
 
-
         return temp, humidity, rainfall
     except Exception as e:
         print(f"Weather fetch error: {e}")
@@ -210,6 +210,19 @@ disease_map = {
     14: "Red Stripe",
     15: "Healthy"
 }
+
+# ---------------- Serve HTML Templates ----------------
+@app.route('/', defaults={'path': 'home.html'})
+@app.route('/<path:path>')
+def serve_html(path):
+    valid_paths = ['home.html', 'prediction.html', 'results.html', 'signin.html', 'climate.html', 'health.html', 'knowledge.html']
+    if path in valid_paths:
+        return render_template(path)
+    return render_template('home.html')
+
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    return send_from_directory('static', filename)
 
 # ---------------- Prediction Endpoint ----------------
 @app.route('/predict', methods=['POST'])
@@ -281,7 +294,10 @@ def predict():
         print(f"Predicting for {municipality}, {province}: Temp={temp}, Hum={humidity}, Rain={rainfall}")
         return jsonify({"error": f"Prediction error: {str(e)}"}), 500
 
-
 # ---------------- Run Server ----------------
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+else:
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
